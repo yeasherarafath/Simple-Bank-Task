@@ -12,8 +12,9 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    {{-- bs 4 --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css">
+    {{-- bs 5 --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <!-- Scripts -->
 </head>
 <body>
@@ -36,7 +37,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        @guest
+                        @guest('admin')
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -49,9 +50,15 @@
                                 </li>
                             @endif
                         @else
+                        <li class="nav-item">
+                            <a href="{{ route('admin.deposit') }}" class="nav-link ">Deposit</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.withdraw') }}" class="nav-link ">Withdraw</a>
+                        </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::guard('admin')->user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -77,6 +84,17 @@
         </main>
     </div>
 </body>
-{{-- bs 4 --}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js">
+{{-- bs 5 script--}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+{!! Toastr::message() !!}
+
+@if ($errors->any())
+<script>
+    @foreach ($errors->all() as $error)
+    toastr.error("{{ $error }}")
+    @endforeach
+</script>
+@endif
 </html>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
-            $table->foreignId('user_id')->constrained('users','id' );
+            $table->id();
+            $table->foreignId('user_id')->constrained('users');
             $table->enum('transaction_type', ['deposit', 'withdrawal']);
             $table->double('amount');
             $table->decimal('fee');
