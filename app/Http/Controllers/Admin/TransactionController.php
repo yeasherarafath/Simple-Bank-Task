@@ -80,9 +80,7 @@ class TransactionController extends Controller
             $user = User::with('transactions')->find($request->user);
 
 
-            $user_month_trx = Transaction::withdraw()
-                        ->whereMonth('date', now()->format('m'))
-                        ->whereYear('date', now()->format('Y'))->sum('amount');
+            
 
 
             
@@ -97,6 +95,11 @@ class TransactionController extends Controller
 
             if ($user->account_type == 'Individual') {
                 // for Individual ac
+
+                $user_month_trx = Transaction::withdraw()
+                    ->whereMonth('date', now()->format('m'))
+                    ->whereYear('date', now()->format('Y'))->sum('amount');
+
                 $trx_percent = 0.015;
                 if(now()->format('N')==5){
                     $feeAmount = 0;
@@ -124,13 +127,15 @@ class TransactionController extends Controller
 
             } else {
                 // for bussiness ac
+
+                $user_total_trx = Transaction::withdraw()
+                        ->sum('amount');
+
                 $trx_percent = 0.025;
-                if ($amount > 50000) {
-                    $intialFee = self::calculatePercentage(50000, $trx_percent);
-                    $feeAmount = $amount - 50000;
-                    $trnx->fee = $intialFee + self::calculatePercentage($feeAmount, 0.015);
+                if ($user_total_trx > 50000) {
+                    $trnx->fee =  self::calculatePercentage($amount, 0.015);
                 }else{
-                    $trnx->fee = self::calculatePercentage(50000, $trx_percent);
+                    $trnx->fee = self::calculatePercentage($amount, $trx_percent);
                 }
                 
             }
