@@ -1,5 +1,3 @@
-convert this to readme text in markup format
-
 clone this repo,
 
 rename the env and add db name, 
